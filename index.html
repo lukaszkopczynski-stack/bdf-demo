@@ -227,7 +227,10 @@ let state = Q.map(q => q.type === "abcd" ? null : []);
 let shuffles = Q.map(q => q.type === "order" ? shuffle(q.tiles.map((_, i) => i)) : null);
 
 // dodaj ?reset do adresu, aby wyczyścić zapisane odpowiedzi (np. przed pokazem)
-if (/[?&]reset/.test(location.search)) { try{ localStorage.removeItem(STORE_KEY); }catch(e){} }
+if (/[?&]reset/.test(location.search)) {
+  try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+  try{ history.replaceState(null, "", location.pathname); }catch(e){} // odświeżenie strony nie skasuje już odpowiedzi
+}
 try {
   const saved = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
   if (saved && saved.state && saved.state.length === Q.length) { state = saved.state; shuffles = saved.shuffles; }
