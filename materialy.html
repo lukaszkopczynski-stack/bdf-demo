@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Szkolenie BMP – materiały</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  /* Układ: jedna kolumna jak teczka trenera – szybkie linki na górze, potem zadania i następne kroki */
+  :root{
+    --bg:#F3F6FB; --surface:#FFFFFF; --ink:#0E1A3A; --muted:#5B6787; --line:#DCE4F1;
+    --navy:#0B1F5C; --accent:#2E6FD8; --gold:#E9B526; --gold-soft:#FFF5D6; --ok:#1E9E6A;
+    --display:"Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --body:"Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+    --bg:#08102A; --surface:#111C3F; --ink:#E8EEFA; --muted:#A3B0CF; --line:#24325C;
+    --navy:#8FB4F2; --accent:#7FB0FF; --gold:#F4C542; --gold-soft:#2A2610; --ok:#4FD39B; color-scheme:dark } }
+  :root[data-theme="dark"]{
+    --bg:#08102A; --surface:#111C3F; --ink:#E8EEFA; --muted:#A3B0CF; --line:#24325C;
+    --navy:#8FB4F2; --accent:#7FB0FF; --gold:#F4C542; --gold-soft:#2A2610; --ok:#4FD39B; color-scheme:dark }
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;margin:0}
+  .wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:28px 60px}
+  h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15;color:var(--navy)}
+  h1{font-size:clamp(30px,6vw,42px);margin:6px 0 10px;font-weight:800}
+  h2{font-size:26px;margin:44px 0 12px;font-weight:800}
+  h3{font-size:19px;margin:22px 0 8px}
+  .eyebrow{font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--muted)}
+  .lead{color:var(--muted);max-width:62ch;margin:0}
+  a{color:var(--accent);font-weight:600}
+  a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  .links{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:22px}
+  .link{display:flex;flex-direction:column;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:14px;
+        padding:14px 16px;text-decoration:none;color:var(--ink);min-width:0}
+  .link b{font-family:var(--display);font-size:17px;color:var(--navy)}
+  .link span{font-size:14px;color:var(--muted);font-weight:400}
+  .link code{font-size:12.5px;color:var(--accent);overflow-wrap:anywhere}
+  .qr{display:grid;grid-template-columns:180px 1fr;gap:20px;align-items:center;background:var(--surface);border:1px solid var(--line);
+      border-radius:16px;padding:16px;margin-top:14px}
+  .qr img{width:100%;background:#fff;border-radius:10px;padding:6px;box-sizing:border-box}
+  @media(max-width:560px){.qr{grid-template-columns:1fr}.qr img{max-width:220px}}
+  ol,ul{padding-left:22px;margin:6px 0} li{margin:5px 0}
+  .board{width:100%;max-width:100%;height:auto;border-radius:14px;background:#fff;border:1px solid var(--line);display:block}
+  .pill{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:999px;
+        background:var(--gold-soft);color:var(--ink);border:1px solid var(--gold)}
+  .answer{font-family:var(--display);font-weight:800;letter-spacing:4px;font-size:22px;color:var(--navy)}
+  .note{background:var(--gold-soft);border-left:4px solid var(--gold);border-radius:0 12px 12px 0;padding:10px 14px;margin:14px 0}
+  .tbl{overflow-x:auto} table{border-collapse:collapse;width:100%;font-size:15px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+  .done{color:var(--ok);font-weight:700}
+  footer{margin-top:50px;font-size:13px;color:var(--muted)}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Source+Sans+3:wght@400;600;700&display=swap">
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Beiersdorf Manufacturing Poznań · teczka trenera</div>
+  <h1>Szkolenie BMP – materiały</h1>
+  <p class="lead">Wszystko w jednym miejscu: działające linki, opis obu zadań, przebieg gry i to, co zostało do zrobienia. Strona działa bez laptopa.</p>
+
+  <div class="links">
+    <a class="link" href="https://lukaszkopczynski-stack.github.io/bdf-demo/?reset"><b>Zadanie 1 · Quiz „Złam kod!”</b><span>Aplikacja na telefon z logo klienta, cyfra 2</span><code>lukaszkopczynski-stack.github.io/bdf-demo</code></a>
+    <a class="link" href="https://lukaszkopczynski-stack.github.io/bdf-demo/puzzle/"><b>Zadanie 2 · Gwiazdozbiór Mocy</b><span>Pełna instrukcja: plansza, klucz, cięcie, koperty</span><code>…/bdf-demo/puzzle/</code></a>
+    <a class="link" href="https://lukaszkopczynski-stack.github.io/bdf-demo/puzzle/plansza_A0.svg"><b>Plansza A0 (SVG)</b><span>Plik dla drukarni, 1189 × 841 mm, wektor</span><code>…/puzzle/plansza_A0.svg</code></a>
+    <a class="link" href="https://lukaszkopczynski-stack.github.io/bdf-demo/puzzle/karty_legendy.html"><b>Karty legendy</b><span>33 karty, 8 na stronę A4</span><code>…/puzzle/karty_legendy.html</code></a>
+  </div>
+
+  <h2>Zadanie 1 · Quiz „Złam kod!”</h2>
+  <div class="qr">
+    <img src="qr/qr-bdf-demo.png" alt="Kod QR do quizu">
+    <div>
+      <p style="margin-top:0">Uczestnik skanuje kod, odpowiada na 5 pytań (3 × ABCD, 2 × układanie kafelków) i naciska <b>SPRAWDŹ</b>.</p>
+      <ul>
+        <li>Błędne lub puste pytania świecą na czerwono z prośbą o poprawkę.</li>
+        <li>Komplet dobrych odpowiedzi odsłania cyfrę kodu: <span class="answer">2</span></li>
+        <li>Każde pytanie ma przycisk „↺ Wyczyść”.</li>
+        <li>Kod QR otwiera quiz z wyczyszczonymi odpowiedziami (adres z <code>?reset</code>).</li>
+      </ul>
+    </div>
+  </div>
+  <p class="note">Pytania są przykładowe (2 + 2 itd.). Treść, cyfrę i teksty zmienia się w bloku <code>CONFIG</code> na górze pliku <code>index.html</code> – wystarczy napisać do Claude, co zmienić.</p>
+
+  <h2>Zadanie 2 · Gwiazdozbiór Mocy</h2>
+  <img class="board" src="puzzle/plansza_A0.svg" alt="Plansza: plaster miodu z 33 sześciokątów, w środku dwie złote wstęgi z hasłem">
+  <h3>Jak to działa</h3>
+  <ul>
+    <li><b>33 zespoły = 33 sześciokąty</b> (rzędy 6-5-6-5-6-5). Każdy kawałek ma jeden symbol.</li>
+    <li><b>Alfabet szyfru: 33 symbole</b> – 32 polskie litery + „!”. Polskie znaki to symbol bazowy z ogonkiem, kreską, kropką lub przekreśleniem.</li>
+    <li>Każdy zespół dostaje <b>1 kawałek + 1 kartę legendy</b> (symbol = litera). Nikt nie ma karty do własnego symbolu.</li>
+    <li>Hasło stoi na <b>dwóch złotych wstęgach</b> w środku mapy. Wstęgi przechodzą przez kilka kawałków, więc widać je dopiero po złożeniu.</li>
+    <li>Pozostałe 26 symboli jest małych i przygaszonych – to tło.</li>
+  </ul>
+  <h3>Rozwiązanie</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Wstęga</th><th>Symbole</th><th>Słowo</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>korona · słońce · korona · strzała</td><td><b>MAMY</b></td></tr>
+      <tr><td>2</td><td>korona · planeta · gwiazda</td><td><b>MOC</b></td></tr>
+    </tbody>
+  </table></div>
+  <p>Hasło: <span class="answer">MAMY MOC</span></p>
+  <h3>Przebieg gry</h3>
+  <ol>
+    <li>Każdy zespół otwiera kopertę: sześciokąt + karta „Fragment klucza”.</li>
+    <li>Cała sala składa mapę w jednym miejscu (podłoga, stół, ściana). Pomaga koło zodiaku, Droga Mleczna i złote wstęgi.</li>
+    <li>Po złożeniu widać 7 dużych symboli: 4 na wstędze 1, 3 na wstędze 2.</li>
+    <li>Sala szuka kart: „Kto ma koronę? Kto ma słońce?”. Potrzebne są karty M, A, Y, O, C – ma je 5 z 33 zespołów.</li>
+    <li>Litery podpisuje się pod symbolami i czyta od lewej do prawej: MAMY · MOC.</li>
+    <li>Finał: wszyscy razem wołają hasło.</li>
+  </ol>
+  <h3>Druk i cięcie</h3>
+  <ul>
+    <li>Plansza: A0 na sztywnej płycie (kapa, forex, PCV 3 mm) lub kartonie 350–400 g z laminatem. Drukarnia może wyciąć po liniach heksagonów ploterem.</li>
+    <li>Cięcie samemu: same proste cięcia nożykiem po linijce. Przed cięciem ponumeruj odwrót według mapy cięcia.</li>
+    <li>Koperta zespołu X = kawałek nr X + karta legendy #X (tabela w pełnej instrukcji).</li>
+  </ul>
+
+  <h2>Status i następne kroki</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Element</th><th>Stan</th></tr></thead>
+    <tbody>
+      <tr><td>Quiz z logo, czyszczeniem i kodem QR</td><td class="done">Gotowe, online</td></tr>
+      <tr><td>Puzzle „Gwiazdozbiór Mocy” – plansza, karty, instrukcja</td><td class="done">Gotowe</td></tr>
+      <tr><td>Druga wersja zadania 2 (do pokazania klientowi)</td><td><span class="pill">W przygotowaniu</span></td></tr>
+      <tr><td>Prawdziwe pytania do quizu i cyfry dla stacji</td><td>Do ustalenia z klientem</td></tr>
+      <tr><td>Hosting na szkolenie</td><td>Repozytorium GitHub jest publiczne – odpowiedzi widać w kodzie. Na szkolenie: serwer LH.pl lub Netlify.</td></tr>
+    </tbody>
+  </table></div>
+
+  <footer>Pliki źródłowe: laptop, folder Desktop/PROJEKTY/Claude/NIVEA. Aktualizacja: 14.10.2026.</footer>
+</div>
+</body>
+</html>
