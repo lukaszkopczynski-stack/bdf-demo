@@ -61,7 +61,8 @@
 
   <div class="links">
     <a class="link" href="https://lukaszkopczynski-stack.github.io/bdf-demo/?reset"><b>Zadanie 1 · Quiz „Złam kod!”</b><span>Aplikacja na telefon z logo klienta, cyfra 2</span><code>lukaszkopczynski-stack.github.io/bdf-demo</code></a>
-    <a class="link" href="https://lukaszkopczynski-stack.github.io/bdf-demo/puzzle/"><b>Zadanie 2 · Gwiazdozbiór Mocy</b><span>Pełna instrukcja: plansza, klucz, cięcie, koperty</span><code>…/bdf-demo/puzzle/</code></a>
+    <a class="link" href="https://lukaszkopczynski-stack.github.io/bdf-demo/puzzle-tor/"><b>Zadanie 2B · Road to 2028</b><span>Mozaika-okrąg pokazuje kolejność 33 segmentów toru</span><code>…/bdf-demo/puzzle-tor/</code></a>
+    <a class="link" href="https://lukaszkopczynski-stack.github.io/bdf-demo/puzzle/"><b>Zadanie 2A · Gwiazdozbiór Mocy</b><span>Pełna instrukcja: plansza, klucz, cięcie, koperty</span><code>…/bdf-demo/puzzle/</code></a>
     <a class="link" href="https://lukaszkopczynski-stack.github.io/bdf-demo/puzzle/plansza_A0.svg"><b>Plansza A0 (SVG)</b><span>Plik dla drukarni, 1189 × 841 mm, wektor</span><code>…/puzzle/plansza_A0.svg</code></a>
     <a class="link" href="https://lukaszkopczynski-stack.github.io/bdf-demo/puzzle/karty_legendy.html"><b>Karty legendy</b><span>33 karty, 8 na stronę A4</span><code>…/puzzle/karty_legendy.html</code></a>
   </div>
@@ -81,7 +82,7 @@
   </div>
   <p class="note">Pytania są przykładowe (2 + 2 itd.). Treść, cyfrę i teksty zmienia się w bloku <code>CONFIG</code> na górze pliku <code>index.html</code> – wystarczy napisać do Claude, co zmienić.</p>
 
-  <h2>Zadanie 2 · Gwiazdozbiór Mocy</h2>
+  <h2>Zadanie 2A · Gwiazdozbiór Mocy (szyfr)</h2>
   <img class="board" src="puzzle/plansza_A0.svg" alt="Plansza: plaster miodu z 33 sześciokątów, w środku dwie złote wstęgi z hasłem">
   <h3>Jak to działa</h3>
   <ul>
@@ -116,13 +117,35 @@
     <li>Koperta zespołu X = kawałek nr X + karta legendy #X (tabela w pełnej instrukcji).</li>
   </ul>
 
+  <h2>Zadanie 2B · Road to 2028 (tor)</h2>
+  <img class="board" src="puzzle-tor/mozaika.svg" alt="Okrągła mozaika: droga od START do META 2028 z 33 symbolami">
+  <h3>Jak to działa</h3>
+  <ul>
+    <li>W boxie zespół znajduje <b>kawałek okrągłej mozaiki</b> (fragment instrukcji) i <b>segment toru z symbolem</b>.</li>
+    <li>Mozaika: 33 elementy – 24 w pierścieniu zewnętrznym, 8 w środkowym, środek „META 2028”. Kształt nawiązuje do wieczka kremu.</li>
+    <li>Po złożeniu widać drogę od <b>START</b> do <b>META 2028</b> z 33 symbolami i strzałkami kierunku. Na mozaice nie ma numerów.</li>
+    <li>Zespół szuka symbolu ze swojego segmentu i liczy, którym jest od START. To jego miejsce w torze. Symbol nigdy nie leży na własnym kawałku zespołu.</li>
+    <li>Segmenty łączą się w kolejności 1 → 33 od startu do sceny; naklejka „WEJŚCIE ━▶ WYJŚCIE” pokazuje kierunek jazdy kuli.</li>
+  </ul>
+  <h3>A czy B?</h3>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>2A · Gwiazdozbiór Mocy</th><th>2B · Road to 2028</th></tr></thead>
+    <tbody>
+      <tr><td>Wynik</td><td>Hasło „MAMY MOC”</td><td>Kolejność 33 segmentów toru</td></tr>
+      <tr><td>W boxie</td><td>Kawałek planszy + karta legendy</td><td>Kawałek mozaiki + segment toru</td></tr>
+      <tr><td>Współpraca</td><td>Wymiana legend między zespołami</td><td>Wszyscy budują jeden tor</td></tr>
+      <tr><td>Produkcja</td><td>Plansza A0 + karty</td><td>Mozaika Ø 2,4–3 m + fizyczny tor (firma eventowa)</td></tr>
+      <tr><td>Finał</td><td>Wspólne wykrzyczenie hasła</td><td>Kula przejeżdża tor i wjeżdża w ekran LED</td></tr>
+    </tbody>
+  </table></div>
+
   <h2>Status i następne kroki</h2>
   <div class="tbl"><table>
     <thead><tr><th>Element</th><th>Stan</th></tr></thead>
     <tbody>
       <tr><td>Quiz z logo, czyszczeniem i kodem QR</td><td class="done">Gotowe, online</td></tr>
       <tr><td>Puzzle „Gwiazdozbiór Mocy” – plansza, karty, instrukcja</td><td class="done">Gotowe</td></tr>
-      <tr><td>Druga wersja zadania 2 (do pokazania klientowi)</td><td><span class="pill">W przygotowaniu</span></td></tr>
+      <tr><td>Wersja B zadania 2 – Road to 2028 (mozaika, naklejki, instrukcja)</td><td class="done">Gotowe</td></tr>
       <tr><td>Prawdziwe pytania do quizu i cyfry dla stacji</td><td>Do ustalenia z klientem</td></tr>
       <tr><td>Hosting na szkolenie</td><td>Repozytorium GitHub jest publiczne – odpowiedzi widać w kodzie. Na szkolenie: serwer LH.pl lub Netlify.</td></tr>
     </tbody>
