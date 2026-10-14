@@ -108,6 +108,30 @@
   .tiles-hint{font-size:13px;color:var(--muted);margin:10px 0 0;display:flex;justify-content:space-between;align-items:center;gap:8px}
   .reset{appearance:none;border:0;background:none;color:var(--blue);font:inherit;font-weight:700;font-size:13px;padding:6px 0;cursor:pointer}
 
+  /* PARY */
+  .match{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}
+  .mcol{display:flex;flex-direction:column;gap:8px;min-width:0}
+  .mi{appearance:none;font:inherit;font-weight:800;font-size:17px;color:var(--ink);cursor:pointer;text-align:left;
+      border:2px solid #DCE5F3;background:#F7FAFE;border-radius:14px;padding:13px 12px;min-height:54px;
+      display:flex;align-items:center;gap:8px;transition:transform .08s,border-color .15s,background .15s}
+  .mi:active{transform:scale(.97)}
+  .mi .dot{width:12px;height:12px;border-radius:50%;border:2px solid #B9C8E2;flex:none}
+  .mi.paired{border-color:var(--pc);background:color-mix(in srgb, var(--pc) 12%, #fff)}
+  .mi.paired .dot{background:var(--pc);border-color:var(--pc)}
+  .mi.active{border-color:var(--navy);box-shadow:0 0 0 3px rgba(46,111,216,.25);background:#EAF2FF}
+  .mcol-h{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)}
+
+  /* SUWAK */
+  .slider-val{text-align:center;font-size:44px;font-weight:900;color:var(--navy);line-height:1;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+  .slider-val.empty{font-size:16px;font-weight:700;color:var(--muted);padding:14px 0}
+  .slider-unit{text-align:center;font-size:13px;color:var(--muted);margin-bottom:10px}
+  .slider-row{display:flex;align-items:center;gap:10px}
+  .slider-row input{flex:1;min-width:0;accent-color:var(--blue);height:36px}
+  .step{appearance:none;border:0;width:44px;height:44px;border-radius:12px;flex:none;cursor:pointer;
+        background:linear-gradient(160deg,var(--blue),var(--navy-2));color:#fff;font:inherit;font-size:24px;font-weight:800;box-shadow:0 3px 0 var(--navy-deep)}
+  .step:active{transform:translateY(2px);box-shadow:0 1px 0 var(--navy-deep)}
+  .slider-scale{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin:2px 56px 0}
+
   /* ---------- BOTTOM BAR ---------- */
   .bar{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:12px 16px calc(12px + env(safe-area-inset-bottom));
        background:linear-gradient(to top, var(--ice) 70%, rgba(234,242,252,0))}
@@ -194,6 +218,8 @@
    KONFIGURACJA – tu zmieniasz treść zadania
    type: "abcd"  -> options: 4 odpowiedzi, answer: indeks poprawnej (0=A, 1=B, 2=C, 3=D)
    type: "order" -> tiles: kafelki W POPRAWNEJ KOLEJNOŚCI (aplikacja sama je przetasuje)
+   type: "match" -> pairs: poprawne pary [lewa, prawa] (prawa kolumna zostanie przetasowana)
+   type: "slider"-> min, max, step, answer, tolerance (dopuszczalne odchylenie, 0 = dokładnie), unit (podpis)
    ===================================================================== */
 const CONFIG = {
   station: "Zadanie 1 · Stacja Kod",
@@ -203,16 +229,16 @@ const CONFIG = {
   outro: "Zapiszcie ją – to element Waszego kodu!",
   questions: [
     { type:"abcd",  text:"Ile to jest 2 + 2?",  options:["3","4","5","22"], answer:1 },
-    { type:"abcd",  text:"Ile to jest 3 × 3?",  options:["6","33","9","12"], answer:2 },
+    { type:"match", text:"Połączcie działanie z wynikiem.", pairs:[["2 + 3","5"],["4 × 2","8"],["9 − 7","2"],["12 : 4","3"]] },
     { type:"order", text:"Ułóżcie liczby od najmniejszej do największej.", tiles:["2","4","7","9"] },
-    { type:"abcd",  text:"Ile to jest 10 − 7?", options:["3","17","7","4"], answer:0 },
+    { type:"slider", text:"Ile sekund ma jedna godzina?", min:0, max:10000, step:100, answer:3600, tolerance:0, unit:"sekund" },
     { type:"order", text:"Ułóżcie działania od najmniejszego do największego wyniku.", tiles:["9 − 8","2 × 3","4 + 4","5 + 5"] }
   ]
 };
 /* ===================================================================== */
 
 const $ = s => document.querySelector(s);
-const STORE_KEY = "bdf-quiz-v1";
+const STORE_KEY = "bdf-quiz-v2";
 const Q = CONFIG.questions;
 const LETTERS = ["A","B","C","D"];
 
@@ -221,10 +247,14 @@ $("#title").textContent = CONFIG.title;
 $("#intro").textContent = CONFIG.intro;
 $("#outro").textContent = CONFIG.outro;
 
-// stan: abcd -> indeks lub null; order -> tablica wybranych kafelków (indeksy w tablicy tiles)
-let state = Q.map(q => q.type === "abcd" ? null : []);
-// stała (per urządzenie) kolejność potasowanych kafelków
-let shuffles = Q.map(q => q.type === "order" ? shuffle(q.tiles.map((_, i) => i)) : null);
+// stan: abcd/slider -> wartość lub null; order -> tablica wybranych kafelków; match -> dla każdej lewej pozycji indeks prawej lub null
+const emptyState = q => q.type === "order" ? [] : q.type === "match" ? q.pairs.map(() => null) : null;
+let state = Q.map(emptyState);
+// stała (per urządzenie) kolejność potasowanych kafelków / prawej kolumny par
+let shuffles = Q.map(q => q.type === "order" ? shuffle(q.tiles.map((_, i) => i))
+                        : q.type === "match" ? shuffle(q.pairs.map((_, i) => i)) : null);
+const PAIR_COLORS = ["#2E6FD8","#1E9E6A","#E08A00","#8E44AD","#0E9AA7","#C2185B"];
+let activeLeft = null;   // {qi, l} – zaznaczona lewa pozycja w pytaniu „match”
 
 // dodaj ?reset do adresu, aby wyczyścić zapisane odpowiedzi (np. przed pokazem)
 if (/[?&]reset/.test(location.search)) {
@@ -251,14 +281,14 @@ function render(){
     card.className = "card"; card.id = "q"+qi;
     card.innerHTML = `
       <div class="q-head"><div class="q-num">${qi+1}</div>
-        <div class="q-type">${q.type==="abcd" ? "Wybierz jedną odpowiedź" : "Ułóż we właściwej kolejności"}</div>
+        <div class="q-type">${({abcd:"Wybierz jedną odpowiedź", order:"Ułóż we właściwej kolejności", match:"Połącz w pary", slider:"Ustaw suwak"})[q.type]}</div>
         <button class="clear" aria-label="Wyczyść odpowiedź na pytanie ${qi+1}">↺ Wyczyść</button></div>
       <p class="q-text"></p><div class="body"></div><div class="note"></div>`;
     card.querySelector(".q-text").textContent = q.text;
     const body = card.querySelector(".body");
     const clear = card.querySelector(".clear");
-    clear.hidden = !(q.type === "abcd" ? state[qi] !== null : state[qi].length);
-    clear.onclick = () => { state[qi] = q.type === "abcd" ? null : []; changed(qi); };
+    clear.hidden = !touched(qi);
+    clear.onclick = () => { state[qi] = emptyState(q); activeLeft = null; changed(qi); };
 
     if (q.type === "abcd") {
       const opts = document.createElement("div"); opts.className = "opts";
@@ -271,6 +301,65 @@ function render(){
         opts.appendChild(b);
       });
       body.appendChild(opts);
+    } else if (q.type === "match") {
+      const wrap = document.createElement("div"); wrap.className = "match";
+      const left = document.createElement("div"), right = document.createElement("div");
+      left.className = right.className = "mcol";
+      left.innerHTML = '<div class="mcol-h">Działanie</div>'; right.innerHTML = '<div class="mcol-h">Wynik</div>';
+      const leftHead = q.headers ? q.headers[0] : null, rightHead = q.headers ? q.headers[1] : null;
+      if (leftHead) left.firstChild.textContent = leftHead;
+      if (rightHead) right.firstChild.textContent = rightHead;
+      q.pairs.forEach((p, l) => {
+        const b = document.createElement("button");
+        const r = state[qi][l];
+        b.className = "mi" + (r !== null ? " paired" : "") + (activeLeft && activeLeft.qi===qi && activeLeft.l===l ? " active" : "");
+        b.style.setProperty("--pc", PAIR_COLORS[l % PAIR_COLORS.length]);
+        b.innerHTML = '<span class="dot"></span><span></span>'; b.lastChild.textContent = p[0];
+        b.onclick = () => { activeLeft = (activeLeft && activeLeft.qi===qi && activeLeft.l===l) ? null : {qi, l}; render(); applyMarks(); };
+        left.appendChild(b);
+      });
+      shuffles[qi].forEach(r => {
+        const b = document.createElement("button");
+        const l = state[qi].indexOf(r);
+        b.className = "mi" + (l >= 0 ? " paired" : "");
+        if (l >= 0) b.style.setProperty("--pc", PAIR_COLORS[l % PAIR_COLORS.length]);
+        b.innerHTML = '<span class="dot"></span><span></span>'; b.lastChild.textContent = q.pairs[r][1];
+        b.onclick = () => {
+          if (!activeLeft || activeLeft.qi !== qi) { if (l >= 0) { state[qi][l] = null; changed(qi); } return; }
+          state[qi] = state[qi].map(v => v === r ? null : v);   // prawa pozycja może mieć tylko jedną parę
+          state[qi][activeLeft.l] = r; activeLeft = null; changed(qi);
+        };
+        right.appendChild(b);
+      });
+      wrap.append(left, right);
+      const hint = document.createElement("div"); hint.className = "tiles-hint";
+      hint.innerHTML = "<span>Stuknij pozycję z lewej, potem pasującą z prawej. Para dostanie wspólny kolor.</span>";
+      body.append(wrap, hint);
+    } else if (q.type === "slider") {
+      const v = state[qi];
+      const val = document.createElement("div"); val.className = "slider-val" + (v === null ? " empty" : "");
+      val.textContent = v === null ? "Przesuńcie suwak" : v.toLocaleString("pl-PL");
+      const unit = document.createElement("div"); unit.className = "slider-unit"; unit.textContent = v === null ? "" : (q.unit || "");
+      const row = document.createElement("div"); row.className = "slider-row";
+      const minus = document.createElement("button"); minus.className = "step"; minus.textContent = "−"; minus.setAttribute("aria-label","Zmniejsz");
+      const plus = document.createElement("button"); plus.className = "step"; plus.textContent = "+"; plus.setAttribute("aria-label","Zwiększ");
+      const input = document.createElement("input"); input.type = "range"; input.id = "slider"+qi;
+      input.min = q.min; input.max = q.max; input.step = q.step || 1;
+      input.value = v === null ? Math.round((q.min + q.max) / 2 / (q.step||1)) * (q.step||1) : v;
+      input.setAttribute("aria-label", q.text);
+      const set = nv => { state[qi] = Math.min(q.max, Math.max(q.min, nv)); };
+      input.oninput = () => {   // podczas przesuwania aktualizuj tylko liczbę (bez przebudowy strony)
+        set(+input.value); val.className = "slider-val"; val.textContent = state[qi].toLocaleString("pl-PL");
+        unit.textContent = q.unit || ""; save();
+      };
+      input.onchange = () => changed(qi);
+      minus.onclick = () => { set((state[qi] ?? +input.value) - (q.step||1)); changed(qi); };
+      plus.onclick = () => { set((state[qi] ?? +input.value) + (q.step||1)); changed(qi); };
+      row.append(minus, input, plus);
+      const scale = document.createElement("div"); scale.className = "slider-scale";
+      scale.innerHTML = "<span></span><span></span>";
+      scale.firstChild.textContent = q.min.toLocaleString("pl-PL"); scale.lastChild.textContent = q.max.toLocaleString("pl-PL");
+      body.append(val, unit, row, scale);
     } else {
       const slots = document.createElement("div"); slots.className = "slots";
       for (let s=0; s<q.tiles.length; s++){
@@ -299,8 +388,17 @@ function render(){
   updateProgress();
 }
 
-function answered(qi){ const q=Q[qi]; return q.type==="abcd" ? state[qi]!==null : state[qi].length===q.tiles.length; }
-function correct(qi){ const q=Q[qi]; return q.type==="abcd" ? state[qi]===q.answer : answered(qi) && state[qi].every((v,i)=>v===i); }
+function touched(qi){ const q=Q[qi], st=state[qi];
+  return q.type==="order" ? st.length>0 : q.type==="match" ? st.some(v=>v!==null) : st!==null; }
+function answered(qi){ const q=Q[qi], st=state[qi];
+  if (q.type==="order") return st.length===q.tiles.length;
+  if (q.type==="match") return st.every(v=>v!==null);
+  return st!==null; }
+function correct(qi){ const q=Q[qi], st=state[qi];
+  if (!answered(qi)) return false;
+  if (q.type==="abcd") return st===q.answer;
+  if (q.type==="slider") return Math.abs(st-q.answer) <= (q.tolerance||0);
+  return st.every((v,i)=>v===i); }
 
 let checked = {}; // qi -> "bad"/"good" po ostatnim sprawdzeniu
 function changed(qi){
